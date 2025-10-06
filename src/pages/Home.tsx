@@ -53,11 +53,11 @@ const Home = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 animate-fade-in">
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                IoT-Based Patient Health Monitoring & Alert System
+                IoT-Based Bed-Wise Patient Health Monitoring & Alert System
               </h1>
               <p className="text-lg md:text-xl text-primary-foreground/90">
-                Revolutionary smart hospital system powered by ESP32 microcontrollers, advanced biomedical sensors, 
-                and cloud technologies for real-time patient monitoring and care.
+                Revolutionary smart hospital system with bed-wise monitoring powered by ESP32 microcontrollers per bed, 
+                advanced biomedical sensors, and cloud technologies for real-time patient monitoring and care across multiple beds.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link to="/patient-dashboard">
@@ -89,14 +89,15 @@ const Home = () => {
           <div className="max-w-4xl mx-auto text-center space-y-6">
             <h2 className="text-3xl md:text-4xl font-bold">About the System</h2>
             <p className="text-lg text-muted-foreground">
-              Our IoT-based patient health monitoring system represents the future of healthcare technology. 
-              By integrating ESP32 microcontrollers with advanced biomedical sensors, we provide continuous, 
-              real-time monitoring of vital signs and environmental conditions in hospital wards.
+              Our IoT-based bed-wise patient health monitoring system represents the future of healthcare technology. 
+              By deploying individual ESP32 microcontrollers per bed with advanced biomedical sensors, we provide continuous, 
+              real-time monitoring of vital signs for each patient, enabling scalable deployment across multi-bed wards or entire hospitals.
             </p>
             <p className="text-lg text-muted-foreground">
-              The system utilizes MQTT protocols and Node-RED for efficient data transmission to a MySQL database, 
-              enabling healthcare providers to access critical patient information instantly. With automated alerts, 
-              comprehensive reporting, and intuitive dashboards, we're making healthcare smarter, safer, and more responsive.
+              The system utilizes MQTT protocols and Node-RED for efficient data transmission from multiple ESP32 nodes (one per bed) 
+              to a centralized MySQL database, enabling healthcare providers to access critical patient information per bed instantly. 
+              With bed-specific automated alerts, comprehensive reporting, and intuitive bed-wise dashboards, we're making healthcare smarter, 
+              safer, and more responsive at scale.
             </p>
           </div>
         </div>
@@ -140,8 +141,8 @@ const Home = () => {
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
                 <div className="text-center p-4 bg-primary/10 rounded-lg">
                   <Activity className="h-8 w-8 mx-auto mb-2 text-primary" />
-                  <p className="font-semibold text-sm">ESP32 Devices</p>
-                  <p className="text-xs text-muted-foreground">Sensor Data</p>
+                  <p className="font-semibold text-sm">ESP32 per Bed</p>
+                  <p className="text-xs text-muted-foreground">Per-Bed Sensor Data</p>
                 </div>
                 
                 <div className="hidden md:flex justify-center">

@@ -12,6 +12,7 @@ const Reports = () => {
       id: "RPT-2024-001",
       patientName: "John Doe",
       patientId: "P001",
+      bedNumber: "Bed 1",
       reportType: "Discharge Summary",
       dateGenerated: "2024-01-15",
       status: "Available",
@@ -20,6 +21,7 @@ const Reports = () => {
       id: "RPT-2024-002",
       patientName: "Jane Smith",
       patientId: "P002",
+      bedNumber: "Bed 2",
       reportType: "Weekly Vitals Report",
       dateGenerated: "2024-01-14",
       status: "Available",
@@ -28,6 +30,7 @@ const Reports = () => {
       id: "RPT-2024-003",
       patientName: "Robert Johnson",
       patientId: "P003",
+      bedNumber: "Bed 3",
       reportType: "Discharge Summary",
       dateGenerated: "2024-01-13",
       status: "Available",
@@ -36,6 +39,7 @@ const Reports = () => {
       id: "RPT-2024-004",
       patientName: "Emily Davis",
       patientId: "P004",
+      bedNumber: "Bed 4",
       reportType: "Environmental Report",
       dateGenerated: "2024-01-12",
       status: "Available",
@@ -44,6 +48,7 @@ const Reports = () => {
       id: "RPT-2024-005",
       patientName: "Michael Wilson",
       patientId: "P005",
+      bedNumber: "Bed 1",
       reportType: "Monthly Summary",
       dateGenerated: "2024-01-10",
       status: "Available",
@@ -149,8 +154,9 @@ const Reports = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <Input placeholder="Patient Name or ID" />
+              <Input placeholder="Bed Number" />
               <Select>
                 <SelectTrigger>
                   <SelectValue placeholder="Report Type" />
@@ -186,6 +192,7 @@ const Reports = () => {
                     <TableHead>Report ID</TableHead>
                     <TableHead>Patient</TableHead>
                     <TableHead>Patient ID</TableHead>
+                    <TableHead>Bed Number</TableHead>
                     <TableHead>Report Type</TableHead>
                     <TableHead>Date Generated</TableHead>
                     <TableHead>Status</TableHead>
@@ -198,6 +205,7 @@ const Reports = () => {
                       <TableCell className="font-mono text-sm">{report.id}</TableCell>
                       <TableCell className="font-medium">{report.patientName}</TableCell>
                       <TableCell>{report.patientId}</TableCell>
+                      <TableCell className="font-semibold text-primary">{report.bedNumber}</TableCell>
                       <TableCell>{report.reportType}</TableCell>
                       <TableCell>{report.dateGenerated}</TableCell>
                       <TableCell>

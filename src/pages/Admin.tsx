@@ -14,7 +14,7 @@ const Admin = () => {
       name: "John Doe",
       age: 45,
       ward: "Ward 1",
-      bed: "B-12",
+      bed: "Bed 1",
       admissionDate: "2024-01-10",
       condition: "Stable",
       status: "Active",
@@ -23,8 +23,8 @@ const Admin = () => {
       id: "P002",
       name: "Jane Smith",
       age: 62,
-      ward: "Ward 2",
-      bed: "B-08",
+      ward: "Ward 1",
+      bed: "Bed 2",
       admissionDate: "2024-01-12",
       condition: "Critical",
       status: "Active",
@@ -34,7 +34,7 @@ const Admin = () => {
       name: "Robert Johnson",
       age: 38,
       ward: "Ward 1",
-      bed: "B-15",
+      bed: "Bed 3",
       admissionDate: "2024-01-08",
       condition: "Stable",
       status: "Active",
@@ -43,8 +43,8 @@ const Admin = () => {
       id: "P004",
       name: "Emily Davis",
       age: 55,
-      ward: "Ward 3",
-      bed: "B-03",
+      ward: "Ward 1",
+      bed: "Bed 4",
       admissionDate: "2024-01-14",
       condition: "Improving",
       status: "Active",
@@ -54,11 +54,21 @@ const Admin = () => {
       name: "Michael Wilson",
       age: 71,
       ward: "Ward 2",
-      bed: "B-20",
+      bed: "Bed 1",
       admissionDate: "2024-01-11",
       condition: "Stable",
       status: "Active",
     },
+  ];
+
+  const bedOccupancy = [
+    { ward: "Ward 1", bed: "Bed 1", patient: "John Doe (P001)", status: "Occupied", condition: "Stable" },
+    { ward: "Ward 1", bed: "Bed 2", patient: "Jane Smith (P002)", status: "Occupied", condition: "Critical" },
+    { ward: "Ward 1", bed: "Bed 3", patient: "Robert Johnson (P003)", status: "Occupied", condition: "Stable" },
+    { ward: "Ward 1", bed: "Bed 4", patient: "Emily Davis (P004)", status: "Occupied", condition: "Improving" },
+    { ward: "Ward 1", bed: "Bed 5", patient: "-", status: "Available", condition: "-" },
+    { ward: "Ward 2", bed: "Bed 1", patient: "Michael Wilson (P005)", status: "Occupied", condition: "Stable" },
+    { ward: "Ward 2", bed: "Bed 2", patient: "-", status: "Available", condition: "-" },
   ];
 
   const hospitalOverview = {
@@ -179,8 +189,9 @@ const Admin = () => {
 
         {/* Main Tabs */}
         <Tabs defaultValue="patients" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="patients">Patient Management</TabsTrigger>
+            <TabsTrigger value="beds">Bed Assignment</TabsTrigger>
             <TabsTrigger value="wards">Ward Overview</TabsTrigger>
             <TabsTrigger value="trends">Trends & Analytics</TabsTrigger>
           </TabsList>
@@ -231,6 +242,68 @@ const Admin = () => {
                               <Button size="sm" variant="outline">View</Button>
                               <Button size="sm" variant="destructive">Discharge</Button>
                             </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Bed Assignment Tab */}
+          <TabsContent value="beds" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Bed Occupancy Status</CardTitle>
+                  <div className="flex gap-2">
+                    <Input placeholder="Search by bed or patient..." className="w-64" />
+                    <Button>
+                      <Bed className="h-4 w-4 mr-2" />
+                      Assign to Bed
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Ward</TableHead>
+                        <TableHead>Bed Number</TableHead>
+                        <TableHead>Patient</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Condition</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {bedOccupancy.map((bed, index) => (
+                        <TableRow key={index} className="hover:bg-muted/50">
+                          <TableCell>{bed.ward}</TableCell>
+                          <TableCell className="font-semibold">{bed.bed}</TableCell>
+                          <TableCell>{bed.patient}</TableCell>
+                          <TableCell>
+                            <Badge variant={bed.status === "Occupied" ? "default" : "secondary"}>
+                              {bed.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {bed.condition !== "-" ? getConditionBadge(bed.condition) : "-"}
+                          </TableCell>
+                          <TableCell>
+                            {bed.status === "Occupied" ? (
+                              <Button size="sm" variant="outline">
+                                Discharge
+                              </Button>
+                            ) : (
+                              <Button size="sm" variant="default">
+                                Assign Patient
+                              </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}

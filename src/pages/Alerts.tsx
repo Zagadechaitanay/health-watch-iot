@@ -9,30 +9,33 @@ const Alerts = () => {
     {
       id: 1,
       type: "critical",
-      title: "High Heart Rate Detected",
+      title: "High Heart Rate Detected - Bed 3",
       message: "Patient P003 heart rate: 125 BPM (Normal: 60-100)",
       patientName: "Robert Johnson",
       patientId: "P003",
+      bedNumber: "Bed 3",
       timestamp: "2024-01-15 14:32:15",
       status: "active",
     },
     {
       id: 2,
       type: "warning",
-      title: "Low SpO₂ Level",
-      message: "Patient P007 SpO₂ dropped to 93% (Normal: >95%)",
-      patientName: "Sarah Williams",
-      patientId: "P007",
+      title: "Low SpO₂ Level - Bed 2",
+      message: "Patient P002 SpO₂ dropped to 93% (Normal: >95%)",
+      patientName: "Jane Smith",
+      patientId: "P002",
+      bedNumber: "Bed 2",
       timestamp: "2024-01-15 13:15:42",
       status: "acknowledged",
     },
     {
       id: 3,
       type: "sos",
-      title: "SOS Emergency Triggered",
+      title: "SOS Emergency Triggered - Bed 2",
       message: "Patient P002 activated emergency SOS button",
       patientName: "Jane Smith",
       patientId: "P002",
+      bedNumber: "Bed 2",
       timestamp: "2024-01-15 12:08:33",
       status: "resolved",
     },
@@ -64,7 +67,7 @@ const Alerts = () => {
       id: 1,
       type: "whatsapp",
       recipient: "+1234567890",
-      message: "Alert: High HR for P003",
+      message: "Alert: High HR for P003 - Bed 3",
       status: "sent",
       timestamp: "2024-01-15 14:32:20",
     },
@@ -72,7 +75,7 @@ const Alerts = () => {
       id: 2,
       type: "email",
       recipient: "doctor@hospital.com",
-      message: "Daily Summary Report",
+      message: "Daily Summary Report - All Beds",
       status: "sent",
       timestamp: "2024-01-15 09:00:00",
     },
@@ -80,7 +83,7 @@ const Alerts = () => {
       id: 3,
       type: "whatsapp",
       recipient: "+1234567891",
-      message: "SOS Alert: P002 Emergency",
+      message: "SOS Alert: P002 Emergency - Bed 2",
       status: "sent",
       timestamp: "2024-01-15 12:08:35",
     },
@@ -224,8 +227,10 @@ const Alerts = () => {
                               {getStatusBadge(alert.status)}
                             </div>
                             <p className="text-sm text-muted-foreground">{alert.message}</p>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
                               <span>Patient: {alert.patientName} ({alert.patientId})</span>
+                              <span>•</span>
+                              <span className="font-semibold text-primary">{alert.bedNumber}</span>
                               <span>•</span>
                               <span>{alert.timestamp}</span>
                             </div>

@@ -1,19 +1,76 @@
-import { Heart, Droplets, Thermometer, Activity, AlertCircle } from "lucide-react";
+import { Heart, Droplets, Thermometer, Activity, AlertCircle, Bed } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 
 const PatientDashboard = () => {
-  // Dummy real-time data
-  const vitals = {
-    heartRate: 72,
-    spo2: 98,
-    temperature: 36.8,
-    ecg: "Normal Sinus Rhythm",
-    hydrationLevel: 85,
-    sosActive: false,
+  const [selectedBed, setSelectedBed] = useState("bed1");
+
+  // Dummy real-time data per bed
+  const bedsData = {
+    bed1: {
+      patientName: "John Doe",
+      patientId: "P001",
+      age: 45,
+      admissionDate: "2024-01-10",
+      vitals: {
+        heartRate: 72,
+        spo2: 98,
+        temperature: 36.8,
+        ecg: "Normal Sinus Rhythm",
+        hydrationLevel: 85,
+        sosActive: false,
+      }
+    },
+    bed2: {
+      patientName: "Jane Smith",
+      patientId: "P002",
+      age: 62,
+      admissionDate: "2024-01-12",
+      vitals: {
+        heartRate: 85,
+        spo2: 94,
+        temperature: 37.2,
+        ecg: "Sinus Tachycardia",
+        hydrationLevel: 68,
+        sosActive: false,
+      }
+    },
+    bed3: {
+      patientName: "Robert Johnson",
+      patientId: "P003",
+      age: 38,
+      admissionDate: "2024-01-08",
+      vitals: {
+        heartRate: 68,
+        spo2: 99,
+        temperature: 36.5,
+        ecg: "Normal Sinus Rhythm",
+        hydrationLevel: 92,
+        sosActive: false,
+      }
+    },
+    bed4: {
+      patientName: "Emily Davis",
+      patientId: "P004",
+      age: 55,
+      admissionDate: "2024-01-14",
+      vitals: {
+        heartRate: 78,
+        spo2: 96,
+        temperature: 36.9,
+        ecg: "Normal Sinus Rhythm",
+        hydrationLevel: 78,
+        sosActive: false,
+      }
+    },
   };
+
+  const currentBed = bedsData[selectedBed as keyof typeof bedsData];
+  const vitals = currentBed.vitals;
 
   const vitalRanges = {
     heartRate: { min: 60, max: 100, current: vitals.heartRate },
@@ -31,9 +88,55 @@ const PatientDashboard = () => {
     <div className="min-h-screen bg-muted/30 py-8">
       <div className="container mx-auto px-4">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Patient Dashboard</h1>
-          <p className="text-muted-foreground">Real-time vital signs monitoring</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">Bed-Wise Patient Monitoring</h1>
+          <p className="text-muted-foreground">Real-time vital signs monitoring per bed</p>
         </div>
+
+        {/* Bed Selector Tabs */}
+        <Card className="mb-6">
+          <CardContent className="pt-6">
+            <Tabs value={selectedBed} onValueChange={setSelectedBed} className="w-full">
+              <TabsList className="grid w-full grid-cols-4 mb-4">
+                <TabsTrigger value="bed1" className="flex items-center gap-2">
+                  <Bed className="h-4 w-4" />
+                  Bed 1
+                </TabsTrigger>
+                <TabsTrigger value="bed2" className="flex items-center gap-2">
+                  <Bed className="h-4 w-4" />
+                  Bed 2
+                </TabsTrigger>
+                <TabsTrigger value="bed3" className="flex items-center gap-2">
+                  <Bed className="h-4 w-4" />
+                  Bed 3
+                </TabsTrigger>
+                <TabsTrigger value="bed4" className="flex items-center gap-2">
+                  <Bed className="h-4 w-4" />
+                  Bed 4
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <div className="bg-muted/50 p-4 rounded-lg">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div>
+                  <p className="text-muted-foreground">Patient Name</p>
+                  <p className="font-semibold">{currentBed.patientName}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Patient ID</p>
+                  <p className="font-semibold">{currentBed.patientId}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Age</p>
+                  <p className="font-semibold">{currentBed.age} years</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground">Admission Date</p>
+                  <p className="font-semibold">{currentBed.admissionDate}</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Emergency SOS Status */}
         <Card className={`mb-6 ${vitals.sosActive ? 'border-destructive bg-destructive-light animate-pulse-glow' : 'border-secondary bg-secondary-light'}`}>

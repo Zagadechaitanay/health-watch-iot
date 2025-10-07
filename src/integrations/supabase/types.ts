@@ -14,7 +14,349 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      actuator_controls: {
+        Row: {
+          device_type: string
+          id: string
+          last_updated: string | null
+          status: boolean | null
+          ward_id: string | null
+        }
+        Insert: {
+          device_type: string
+          id?: string
+          last_updated?: string | null
+          status?: boolean | null
+          ward_id?: string | null
+        }
+        Update: {
+          device_type?: string
+          id?: string
+          last_updated?: string | null
+          status?: boolean | null
+          ward_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "actuator_controls_ward_id_fkey"
+            columns: ["ward_id"]
+            isOneToOne: false
+            referencedRelation: "wards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      alerts: {
+        Row: {
+          acknowledged_at: string | null
+          alert_type: string
+          bed_id: string | null
+          created_at: string | null
+          id: string
+          message: string
+          patient_id: string | null
+          resolved_at: string | null
+          severity: string
+          status: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          alert_type: string
+          bed_id?: string | null
+          created_at?: string | null
+          id?: string
+          message: string
+          patient_id?: string | null
+          resolved_at?: string | null
+          severity: string
+          status?: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          alert_type?: string
+          bed_id?: string | null
+          created_at?: string | null
+          id?: string
+          message?: string
+          patient_id?: string | null
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_bed_id_fkey"
+            columns: ["bed_id"]
+            isOneToOne: false
+            referencedRelation: "beds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      beds: {
+        Row: {
+          bed_number: string
+          created_at: string | null
+          id: string
+          is_occupied: boolean | null
+          last_vital_update: string | null
+          status: string
+          ward_id: string | null
+        }
+        Insert: {
+          bed_number: string
+          created_at?: string | null
+          id?: string
+          is_occupied?: boolean | null
+          last_vital_update?: string | null
+          status?: string
+          ward_id?: string | null
+        }
+        Update: {
+          bed_number?: string
+          created_at?: string | null
+          id?: string
+          is_occupied?: boolean | null
+          last_vital_update?: string | null
+          status?: string
+          ward_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beds_ward_id_fkey"
+            columns: ["ward_id"]
+            isOneToOne: false
+            referencedRelation: "wards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      environmental_data: {
+        Row: {
+          co2: number | null
+          humidity: number | null
+          id: string
+          pm25: number | null
+          recorded_at: string | null
+          temperature: number | null
+          vocs: number | null
+          ward_id: string | null
+        }
+        Insert: {
+          co2?: number | null
+          humidity?: number | null
+          id?: string
+          pm25?: number | null
+          recorded_at?: string | null
+          temperature?: number | null
+          vocs?: number | null
+          ward_id?: string | null
+        }
+        Update: {
+          co2?: number | null
+          humidity?: number | null
+          id?: string
+          pm25?: number | null
+          recorded_at?: string | null
+          temperature?: number | null
+          vocs?: number | null
+          ward_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "environmental_data_ward_id_fkey"
+            columns: ["ward_id"]
+            isOneToOne: false
+            referencedRelation: "wards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_logs: {
+        Row: {
+          alert_id: string | null
+          id: string
+          notification_type: string
+          recipient: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          alert_id?: string | null
+          id?: string
+          notification_type: string
+          recipient: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          alert_id?: string | null
+          id?: string
+          notification_type?: string
+          recipient?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_logs_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patients: {
+        Row: {
+          admission_date: string | null
+          age: number | null
+          bed_id: string | null
+          created_at: string | null
+          diagnosis: string | null
+          discharge_date: string | null
+          gender: string | null
+          id: string
+          name: string
+          patient_id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          admission_date?: string | null
+          age?: number | null
+          bed_id?: string | null
+          created_at?: string | null
+          diagnosis?: string | null
+          discharge_date?: string | null
+          gender?: string | null
+          id?: string
+          name: string
+          patient_id: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          admission_date?: string | null
+          age?: number | null
+          bed_id?: string | null
+          created_at?: string | null
+          diagnosis?: string | null
+          discharge_date?: string | null
+          gender?: string | null
+          id?: string
+          name?: string
+          patient_id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patients_bed_id_fkey"
+            columns: ["bed_id"]
+            isOneToOne: false
+            referencedRelation: "beds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      system_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value: Json
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      vitals: {
+        Row: {
+          bed_id: string | null
+          ecg_data: string | null
+          heart_rate: number | null
+          id: string
+          patient_id: string | null
+          recorded_at: string | null
+          spo2: number | null
+          temperature: number | null
+        }
+        Insert: {
+          bed_id?: string | null
+          ecg_data?: string | null
+          heart_rate?: number | null
+          id?: string
+          patient_id?: string | null
+          recorded_at?: string | null
+          spo2?: number | null
+          temperature?: number | null
+        }
+        Update: {
+          bed_id?: string | null
+          ecg_data?: string | null
+          heart_rate?: number | null
+          id?: string
+          patient_id?: string | null
+          recorded_at?: string | null
+          spo2?: number | null
+          temperature?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vitals_bed_id_fkey"
+            columns: ["bed_id"]
+            isOneToOne: false
+            referencedRelation: "beds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vitals_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wards: {
+        Row: {
+          capacity: number
+          created_at: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          capacity?: number
+          created_at?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

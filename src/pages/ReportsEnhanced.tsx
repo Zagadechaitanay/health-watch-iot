@@ -12,11 +12,11 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Reports = () => {
   const [filters, setFilters] = useState({
-    bedId: "",
+    bedId: "all",
     patientName: "",
     dateFrom: "",
     dateTo: "",
-    reportType: "",
+    reportType: "all",
   });
 
   // Fetch beds for filter dropdown
@@ -60,7 +60,7 @@ const Reports = () => {
         .order("recorded_at", { ascending: false })
         .limit(50);
 
-      if (filters.bedId) {
+      if (filters.bedId && filters.bedId !== "all") {
         query = query.eq("bed_id", filters.bedId);
       }
 
@@ -153,7 +153,7 @@ const Reports = () => {
                     <SelectValue placeholder="All Beds" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Beds</SelectItem>
+                    <SelectItem value="all">All Beds</SelectItem>
                     {beds?.map((bed) => (
                       <SelectItem key={bed.id} value={bed.id}>
                         {bed.bed_number} - {bed.ward?.name}
@@ -179,7 +179,7 @@ const Reports = () => {
                     <SelectValue placeholder="All Types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Types</SelectItem>
+                    <SelectItem value="all">All Types</SelectItem>
                     <SelectItem value="daily">Daily Summary</SelectItem>
                     <SelectItem value="discharge">Discharge Report</SelectItem>
                     <SelectItem value="vitals">Vitals History</SelectItem>
@@ -211,7 +211,7 @@ const Reports = () => {
                 <Download className="h-4 w-4 mr-2" />
                 Generate PDF Report
               </Button>
-              <Button variant="outline" onClick={() => setFilters({ bedId: "", patientName: "", dateFrom: "", dateTo: "", reportType: "" })}>
+              <Button variant="outline" onClick={() => setFilters({ bedId: "all", patientName: "", dateFrom: "", dateTo: "", reportType: "all" })}>
                 Clear Filters
               </Button>
             </div>

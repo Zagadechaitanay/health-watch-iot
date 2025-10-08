@@ -103,6 +103,85 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Scalability Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Designed for Scalable Patient Care</h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                From 1 to 100+ beds, this system tracks each bed's health data in real-time, giving doctors full ward oversight from a single interface.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Card className="hover:shadow-lg transition-all">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Heart className="h-6 w-6 text-destructive" />
+                    Bed-Wise Vitals Tracking
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Individual monitoring for each bed with dedicated ESP32 microcontroller, tracking heart rate, SpO₂, temperature, and ECG waveforms independently.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-all">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ShieldCheck className="h-6 w-6 text-secondary" />
+                    Centralized Admin Control
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Comprehensive doctor/admin panel for managing multiple beds, patients, and wards. Real-time overview with instant access to all patient data.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-all">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="h-6 w-6 text-primary" />
+                    Real-Time Ward Environment
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Monitor temperature, humidity, CO₂, and air quality across entire wards. Automated actuator control for optimal patient environment.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="mt-12 bg-gradient-hero rounded-2xl p-8 text-center text-primary-foreground">
+              <h3 className="text-2xl font-bold mb-4">Multi-Bed Hospital Ward Support</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left max-w-3xl mx-auto">
+                <div>
+                  <div className="text-4xl font-bold mb-2">∞</div>
+                  <p className="text-sm text-primary-foreground/90">Unlimited Beds</p>
+                  <p className="text-xs text-primary-foreground/70">Scale from single bed to entire hospitals</p>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold mb-2">24/7</div>
+                  <p className="text-sm text-primary-foreground/90">Real-Time Monitoring</p>
+                  <p className="text-xs text-primary-foreground/70">Continuous data streaming per bed</p>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold mb-2">&lt;3s</div>
+                  <p className="text-sm text-primary-foreground/90">Alert Response</p>
+                  <p className="text-xs text-primary-foreground/70">Instant critical notifications</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4">

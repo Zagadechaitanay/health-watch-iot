@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import PatientDashboard from "./pages/PatientDashboard";
 import WardDashboard from "./pages/WardDashboard";
-import Reports from "./pages/Reports";
+import Reports from "./pages/ReportsEnhanced";
 import Alerts from "./pages/Alerts";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";

@@ -6,6 +6,7 @@ import { DashboardTab } from "@/components/admin/DashboardTab";
 import { BedsTab } from "@/components/admin/BedsTab";
 import { PatientsTab } from "@/components/admin/PatientsTab";
 import { EnvironmentTab } from "@/components/admin/EnvironmentTab";
+import { SettingsTab } from "@/components/admin/SettingsTab";
 
 const Admin = () => {
   const [searchParams] = useSearchParams();
@@ -31,7 +32,7 @@ const Admin = () => {
       case "reports":
         return <div className="text-center py-12 text-muted-foreground">Reports Tab (Coming Soon)</div>;
       case "settings":
-        return <div className="text-center py-12 text-muted-foreground">Settings Tab (Coming Soon)</div>;
+        return <SettingsTab />;
       default:
         return <DashboardTab />;
     }

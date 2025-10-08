@@ -1,76 +1,86 @@
-import { Heart, Droplets, Thermometer, Activity, AlertCircle, Bed } from "lucide-react";
+import { Heart, Droplets, Thermometer, Activity, AlertCircle, Bed, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 const PatientDashboard = () => {
-  const [selectedBed, setSelectedBed] = useState("bed1");
+  const [selectedBedId, setSelectedBedId] = useState<string>("");
 
-  // Dummy real-time data per bed
-  const bedsData = {
-    bed1: {
-      patientName: "John Doe",
-      patientId: "P001",
-      age: 45,
-      admissionDate: "2024-01-10",
-      vitals: {
-        heartRate: 72,
-        spo2: 98,
-        temperature: 36.8,
-        ecg: "Normal Sinus Rhythm",
-        hydrationLevel: 85,
-        sosActive: false,
-      }
+  // Fetch beds with patient and latest vitals
+  const { data: beds } = useQuery({
+    queryKey: ["beds-with-patients"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("beds")
+        .select(`
+          id,
+          bed_number,
+          is_occupied,
+          ward:wards(name),
+          patient:patients!patients_bed_id_fkey(
+            id,
+            name,
+            patient_id,
+            age,
+            gender,
+            diagnosis,
+            admission_date
+          )
+        `)
+        .eq("status", "active")
+        .order("bed_number");
+      
+      if (error) throw error;
+      return data;
     },
-    bed2: {
-      patientName: "Jane Smith",
-      patientId: "P002",
-      age: 62,
-      admissionDate: "2024-01-12",
-      vitals: {
-        heartRate: 85,
-        spo2: 94,
-        temperature: 37.2,
-        ecg: "Sinus Tachycardia",
-        hydrationLevel: 68,
-        sosActive: false,
-      }
+  });
+
+  // Fetch latest vitals for selected bed
+  const { data: latestVitals } = useQuery({
+    queryKey: ["latest-vitals", selectedBedId],
+    queryFn: async () => {
+      if (!selectedBedId) return null;
+      
+      const { data, error } = await supabase
+        .from("vitals")
+        .select("*")
+        .eq("bed_id", selectedBedId)
+        .order("recorded_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data;
     },
-    bed3: {
-      patientName: "Robert Johnson",
-      patientId: "P003",
-      age: 38,
-      admissionDate: "2024-01-08",
-      vitals: {
-        heartRate: 68,
-        spo2: 99,
-        temperature: 36.5,
-        ecg: "Normal Sinus Rhythm",
-        hydrationLevel: 92,
-        sosActive: false,
-      }
-    },
-    bed4: {
-      patientName: "Emily Davis",
-      patientId: "P004",
-      age: 55,
-      admissionDate: "2024-01-14",
-      vitals: {
-        heartRate: 78,
-        spo2: 96,
-        temperature: 36.9,
-        ecg: "Normal Sinus Rhythm",
-        hydrationLevel: 78,
-        sosActive: false,
-      }
-    },
+    enabled: !!selectedBedId,
+  });
+
+  // Set initial selected bed
+  useState(() => {
+    if (beds && beds.length > 0 && !selectedBedId) {
+      setSelectedBedId(beds[0].id);
+    }
+  });
+
+  const selectedBed = beds?.find(b => b.id === selectedBedId);
+  const patient = Array.isArray(selectedBed?.patient) ? selectedBed?.patient[0] : selectedBed?.patient;
+  
+  // Default vitals if no data
+  const vitals = {
+    heartRate: latestVitals?.heart_rate || 72,
+    spo2: latestVitals?.spo2 || 98,
+    temperature: latestVitals?.temperature ? Number(latestVitals.temperature) : 36.8,
+    ecg: latestVitals?.ecg_data || "Normal Sinus Rhythm",
+    hydrationLevel: 85,
+    sosActive: false,
   };
-
-  const currentBed = bedsData[selectedBed as keyof typeof bedsData];
-  const vitals = currentBed.vitals;
 
   const vitalRanges = {
     heartRate: { min: 60, max: 100, current: vitals.heartRate },
@@ -92,49 +102,84 @@ const PatientDashboard = () => {
           <p className="text-muted-foreground">Real-time vital signs monitoring per bed</p>
         </div>
 
-        {/* Bed Selector Tabs */}
+        {/* Bed Selector */}
         <Card className="mb-6">
           <CardContent className="pt-6">
-            <Tabs value={selectedBed} onValueChange={setSelectedBed} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-4">
-                <TabsTrigger value="bed1" className="flex items-center gap-2">
-                  <Bed className="h-4 w-4" />
-                  Bed 1
-                </TabsTrigger>
-                <TabsTrigger value="bed2" className="flex items-center gap-2">
-                  <Bed className="h-4 w-4" />
-                  Bed 2
-                </TabsTrigger>
-                <TabsTrigger value="bed3" className="flex items-center gap-2">
-                  <Bed className="h-4 w-4" />
-                  Bed 3
-                </TabsTrigger>
-                <TabsTrigger value="bed4" className="flex items-center gap-2">
-                  <Bed className="h-4 w-4" />
-                  Bed 4
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-            <div className="bg-muted/50 p-4 rounded-lg">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div>
-                  <p className="text-muted-foreground">Patient Name</p>
-                  <p className="font-semibold">{currentBed.patientName}</p>
+            <div className="mb-4">
+              <label className="text-sm font-medium mb-2 block">Select Bed to Monitor</label>
+              <Select value={selectedBedId} onValueChange={setSelectedBedId}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Choose a bed">
+                    {selectedBed && (
+                      <div className="flex items-center gap-2">
+                        <Bed className="h-4 w-4" />
+                        {selectedBed.bed_number} - {selectedBed.ward?.name}
+                        {patient && ` - ${patient.name}`}
+                      </div>
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {beds?.map((bed) => {
+                    const bedPatient = Array.isArray(bed.patient) ? bed.patient[0] : bed.patient;
+                    return (
+                      <SelectItem key={bed.id} value={bed.id}>
+                        <div className="flex items-center gap-2">
+                          <Bed className="h-4 w-4" />
+                          {bed.bed_number} - {bed.ward?.name}
+                          {bedPatient ? ` - ${bedPatient.name}` : " (Vacant)"}
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {patient ? (
+              <div className="bg-muted/50 p-4 rounded-lg">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+                  <div>
+                    <p className="text-muted-foreground">Patient Name</p>
+                    <p className="font-semibold">{patient.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Patient ID</p>
+                    <p className="font-semibold">{patient.patient_id}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Age / Gender</p>
+                    <p className="font-semibold">{patient.age} / {patient.gender}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Diagnosis</p>
+                    <p className="font-semibold">{patient.diagnosis || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Admission Date</p>
+                    <p className="font-semibold">{new Date(patient.admission_date).toLocaleDateString()}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">Patient ID</p>
-                  <p className="font-semibold">{currentBed.patientId}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Age</p>
-                  <p className="font-semibold">{currentBed.age} years</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Admission Date</p>
-                  <p className="font-semibold">{currentBed.admissionDate}</p>
+                <div className="mt-4 flex gap-2">
+                  <Link to="/reports">
+                    <Button size="sm" variant="outline">
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Reports
+                    </Button>
+                  </Link>
+                  <Link to="/alerts">
+                    <Button size="sm" variant="outline">
+                      <AlertCircle className="h-4 w-4 mr-2" />
+                      View Alerts
+                    </Button>
+                  </Link>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="bg-muted/50 p-4 rounded-lg text-center">
+                <p className="text-muted-foreground">No patient assigned to this bed</p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
